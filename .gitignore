@@ -4,3 +4,6 @@ client/UserSettings/*
 client/.vsconfig
 client/client.sln
 client/Library/*
+servers/.vs/*
+servers/bin/*
+servers/obj/*
