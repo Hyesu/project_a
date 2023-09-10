@@ -1,0 +1,6 @@
+client/Logs/*
+client/Temp/*
+client/UserSettings/*
+client/.vsconfig
+client/client.sln
+client/Library/*
