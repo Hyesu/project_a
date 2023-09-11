@@ -13,3 +13,5 @@ client/Assets/Scenes/*
 servers/.vs/*
 servers/bin/*
 servers/obj/*
+client/Assembly-CSharp.csproj
+client/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json
