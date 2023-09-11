@@ -1,9 +1,15 @@
+# client ignores
 client/Logs/*
 client/Temp/*
 client/UserSettings/*
 client/.vsconfig
 client/client.sln
 client/Library/*
+client/.svn/*
+client/Assets/External/*
+client/Assets/Scenes/*
+
+# server ignores
 servers/.vs/*
 servers/bin/*
 servers/obj/*
