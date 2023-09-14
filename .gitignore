@@ -6,11 +6,14 @@ client/.vsconfig
 client/client.sln
 client/Library/*
 client/.svn/*
+client/Assembly-CSharp.csproj
+client/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json
+
+# track only scripts
 client/Assets/*
+!client/Assets/Scripts
 
 # server ignores
 servers/.vs/*
 servers/bin/*
 servers/obj/*
-client/Assembly-CSharp.csproj
-client/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json
