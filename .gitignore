@@ -6,8 +6,7 @@ client/.vsconfig
 client/client.sln
 client/Library/*
 client/.svn/*
-client/Assets/External/*
-client/Assets/Scenes/*
+client/Assets/*
 
 # server ignores
 servers/.vs/*
