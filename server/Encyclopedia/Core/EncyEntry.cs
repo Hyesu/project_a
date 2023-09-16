@@ -1,19 +1,17 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Encyclopedia.Extensions;
+using Newtonsoft.Json.Linq;
 
 namespace Encyclopedia.Core;
 
 public class EncyEntry
 {
-    protected readonly int _id;
-    protected readonly string _strId;
+    public readonly int Id;
+    public readonly string StrId;
 
-    public int Id => _id;
-    public string StrId => _strId;
-
-    public EncyEntry(int id, string strId)
+    public EncyEntry(JObject json)
     {
-        _id = id;
-        _strId = strId;
+        Id = json.GetInt("Id");
+        StrId = json.GetString("StrId");
     }
 
     public virtual void Initialize(JObject entryObj)

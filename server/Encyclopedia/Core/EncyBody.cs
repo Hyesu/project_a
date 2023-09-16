@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Encyclopedia.Sections;
+using Newtonsoft.Json.Linq;
 
 namespace Encyclopedia.Core;
 
@@ -7,15 +8,25 @@ public class EncyBody
     private readonly string _rootPath;
     private readonly Dictionary<Type, EncySection> _sections;
 
+    public IEnumerable<EncySection> Sections => _sections.Values;
+
     // indexes ///////////////////
-
-
+    public readonly EncyCharacterSection Character;
     //////////////////////////////
 
     public EncyBody(string rootPath)
     {
         _rootPath = rootPath;
         _sections = new();
+
+        // create indexes
+        Character = AddSection(new EncyCharacterSection("Character"));
+    }
+
+    protected T AddSection<T>(T section) where T : EncySection
+    {
+        _sections.Add(typeof(T), section);
+        return section;
     }
 
     public void Initialize()
@@ -34,7 +45,7 @@ public class EncyBody
     private async Task<string> LoadSectionAsync(EncySection section)
     {
         var tablePath = _rootPath + section.Path;
-        var filePaths = Directory.EnumerateFiles(tablePath);
+        var filePaths = Directory.EnumerateFiles(tablePath, "*.json");
         var jsonObjs = new List<JObject>();
         foreach (var filePath in filePaths)
         {

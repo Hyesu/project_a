@@ -23,9 +23,18 @@ public class EncySection
         _entriesByStrId = new();
     }
 
-    public virtual void Initialize(IList<JObject> entryObjs)
+    protected virtual EncyEntry CreateEntry(JObject entry)
     {
-        throw new NotImplementedException($"not implemented ency-section");
+        throw new NotImplementedException($"not implemented ency-section entry creator");
+    }
+
+    public virtual void Initialize(IList<JObject> jsonObjs)
+    {
+        var entries = jsonObjs.Select(x => CreateEntry(x));
+        foreach (var entry in entries)
+        {
+            AddEntry(entry);
+        }
     }
 
     public virtual void PostInitialize(IReadOnlyDictionary<Type, EncySection> allSections)
