@@ -23,12 +23,6 @@ public class EncyBody
         Character = AddSection(new EncyCharacterSection("Character"));
     }
 
-    protected T AddSection<T>(T section) where T : EncySection
-    {
-        _sections.Add(typeof(T), section);
-        return section;
-    }
-
     public void Initialize()
     {
         var sectionTasks = _sections.Values
@@ -60,4 +54,11 @@ public class EncyBody
         section.Initialize(jsonObjs);
         return section.Name;
     }
+
+    protected T AddSection<T>(T section) where T : EncySection
+    {
+        _sections.Add(typeof(T), section);
+        return section;
+    }
+
 }
