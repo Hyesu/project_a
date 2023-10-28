@@ -13,8 +13,8 @@ client/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json
 client/Assets/*
 !client/Assets/Scripts
 
-# server ignores
-server/*/.vs/*
-server/*/bin/*
-server/*/obj/*
-server/*/.editorconfig
+# common source ignores
+src/*/.vs/*
+src/*/bin/*
+src/*/obj/*
+src/*/.editorconfig
