@@ -28,7 +28,11 @@ internal class Program
             }
         }
 
-        var me = encyclopedia.Character.GetByStrId<EncyCharacterEntry>("char_me");
-        Console.WriteLine($"-- me: name({me.Name})");
+        var dlg = encyclopedia.Dialog.GetByStrId<EncyDialogEntry>("dlg_sample");
+        Console.WriteLine($"dlg({dlg.StrId}) type({dlg.Type})");
+        foreach (var speech in dlg.Speeches)
+        {
+            Console.WriteLine($"-- {speech.Character} : {speech.Text} // emotion({speech.Emotion})");
+        }
     }
 }

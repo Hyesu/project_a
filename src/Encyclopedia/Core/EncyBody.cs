@@ -12,6 +12,7 @@ public class EncyBody
 
     // indexes ///////////////////
     public readonly EncyCharacterSection Character;
+    public readonly EncyDialogSection Dialog;
     //////////////////////////////
 
     public EncyBody(string rootPath)
@@ -21,6 +22,7 @@ public class EncyBody
 
         // create indexes
         Character = AddSection(new EncyCharacterSection("Character"));
+        Dialog = AddSection(new EncyDialogSection("Dialog"));
     }
 
     public void Initialize()
