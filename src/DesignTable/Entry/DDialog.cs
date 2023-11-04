@@ -1,9 +1,9 @@
 ﻿using System.Collections.Immutable;
 using Newtonsoft.Json.Linq;
-using Encyclopedia.Core;
-using Encyclopedia.Extensions;
+using DesignTable.Core;
+using DesignTable.Extensions;
 
-namespace Encyclopedia.Entrys;
+namespace DesignTable.Entry;
 
 public enum DialogType
 {
@@ -11,19 +11,19 @@ public enum DialogType
     Conversation,
 }
 
-public class EncyDialogChoice
+public class DDialogChoice
 {
     public readonly string Text;
     public readonly string Key;
 
-    public EncyDialogChoice(JObject json)
+    public DDialogChoice(JObject json)
     {
         Text = json.GetString("Text");
         Key = json.GetString("Key");
     }
 }
 
-public class EncyDialogSpeech
+public class DDialogSpeech
 {
     public readonly string Key;
     public readonly string Character;
@@ -33,9 +33,9 @@ public class EncyDialogSpeech
 
     // 대사 분기
     public readonly string JumpKey;
-    public readonly ImmutableArray<EncyDialogChoice> Choices;
+    public readonly ImmutableArray<DDialogChoice> Choices;
 
-    public EncyDialogSpeech(JObject json)
+    public DDialogSpeech(JObject json)
     {
         Key = json.GetString("Key") ?? string.Empty;
         Character = json.GetString("Character");
@@ -45,22 +45,22 @@ public class EncyDialogSpeech
 
         JumpKey = json.GetString("JumpKey") ?? string.Empty;
         Choices = json.GetObjArray("Choices")
-            .Select(x => new EncyDialogChoice(x))
+            .Select(x => new DDialogChoice(x))
             .ToImmutableArray();
     }
 }
 
-public class EncyDialogEntry : EncyEntry
+public class DDialog : DEntry
 {
     public readonly DialogType Type;
-    public readonly ImmutableArray<EncyDialogSpeech> Speeches;
+    public readonly ImmutableArray<DDialogSpeech> Speeches;
 
-    public EncyDialogEntry(JObject json)
+    public DDialog(JObject json)
         : base(json)
     {
         Type = json.GetEnum<DialogType>("Type");
         Speeches = json.GetObjArray("Speeches")
-            .Select(x => new EncyDialogSpeech(x))
+            .Select(x => new DDialogSpeech(x))
             .ToImmutableArray();
     }
 }

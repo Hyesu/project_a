@@ -1,14 +1,14 @@
-﻿using Encyclopedia.Extensions;
+﻿using DesignTable.Extensions;
 using Newtonsoft.Json.Linq;
 
-namespace Encyclopedia.Core;
+namespace DesignTable.Core;
 
-public class EncyEntry
+public class DEntry
 {
     public readonly int Id;
     public readonly string StrId;
 
-    public EncyEntry(JObject json)
+    public DEntry(JObject json)
     {
         Id = json.GetInt("Id");
         StrId = json.GetString("StrId");

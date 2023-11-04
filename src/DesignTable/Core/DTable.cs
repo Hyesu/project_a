@@ -1,20 +1,21 @@
 ﻿using Newtonsoft.Json.Linq;
+using DesignTable.Core;
 
-namespace Encyclopedia.Core;
+namespace DesignTable.Core;
 
-public class EncySection
+public class DTable
 {
     private readonly string _name;
     private readonly string _path;
 
-    private readonly Dictionary<int, EncyEntry> _entries;
-    private readonly Dictionary<string, EncyEntry> _entriesByStrId;
+    private readonly Dictionary<int, DEntry> _entries;
+    private readonly Dictionary<string, DEntry> _entriesByStrId;
 
     public string Name => _name;
     public string Path => _path;
-    public IEnumerable<EncyEntry> All => _entries.Values;
+    public IEnumerable<DEntry> All => _entries.Values;
 
-    public EncySection(string name, string path)
+    public DTable(string name, string path)
     {
         _name = name;
         _path = path;
@@ -23,7 +24,7 @@ public class EncySection
         _entriesByStrId = new();
     }
 
-    protected virtual EncyEntry CreateEntry(JObject entry)
+    protected virtual DEntry CreateEntry(JObject entry)
     {
         throw new NotImplementedException($"not implemented ency-section entry creator");
     }
@@ -37,11 +38,11 @@ public class EncySection
         }
     }
 
-    public virtual void PostInitialize(IReadOnlyDictionary<Type, EncySection> allSections)
+    public virtual void PostInitialize(IReadOnlyDictionary<Type, DTable> allSections)
     {
     }
 
-    public T? Get<T>(int id) where T : EncyEntry
+    public T? Get<T>(int id) where T : DEntry
     {
         if (!_entries.TryGetValue(id, out var entry))
             return null;
@@ -49,7 +50,7 @@ public class EncySection
         return entry as T;
     }
 
-    public T? GetByStrId<T>(string strId) where T : EncyEntry
+    public T? GetByStrId<T>(string strId) where T : DEntry
     {
         if (!_entriesByStrId.TryGetValue(strId, out var entry))
             return null;
@@ -57,7 +58,7 @@ public class EncySection
         return entry as T;
     }
 
-    protected void AddEntry(EncyEntry entry)
+    protected void AddEntry(DEntry entry)
     {
         if (_entries.ContainsKey(entry.Id))
         {

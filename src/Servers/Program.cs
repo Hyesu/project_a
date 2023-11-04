@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
-using Encyclopedia.Core;
-using Encyclopedia.Entrys;
+using DesignTable.Core;
+using DesignTable.Entry;
 
 internal class Program
 {
@@ -12,15 +12,15 @@ internal class Program
 
         // TODO: 서버 클래스 만들 때 여기서 setting만 넘겨주고, 서버 내부에서 초기화하게 수정
         // load encyclopedia
-        var encyRoot = ConfigurationManager.AppSettings["EncyclopediaRoot"];
-        if (null == encyRoot)
-            throw new InvalidDataException($"not found app setting - EncyclopediaRoot");
+        var ddRoot = ConfigurationManager.AppSettings["DesignDataRoot"];
+        if (null == ddRoot)
+            throw new InvalidDataException($"not found app setting - DesginDataRoot");
 
-        var encyclopedia = new EncyBody(encyRoot);
-        encyclopedia.Initialize();
+        var dt = new DContext(ddRoot);
+        dt.Initialize();
 
         // test code
-        foreach (var section in encyclopedia.Sections)
+        foreach (var section in dt.Sections)
         {
             foreach (var entry in section.All)
             {
@@ -28,7 +28,7 @@ internal class Program
             }
         }
 
-        var dlg = encyclopedia.Dialog.GetByStrId<EncyDialogEntry>("dlg_sample");
+        var dlg = dt.Dialog.GetByStrId<DDialog>("dlg_sample");
         Console.WriteLine($"dlg({dlg.StrId}) type({dlg.Type})");
         foreach (var speech in dlg.Speeches)
         {

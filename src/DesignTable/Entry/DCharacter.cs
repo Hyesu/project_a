@@ -1,16 +1,16 @@
-﻿using Newtonsoft.Json.Linq;
-using Encyclopedia.Core;
-using Encyclopedia.Extensions;
+﻿using DesignTable.Core;
+using DesignTable.Extensions;
+using Newtonsoft.Json.Linq;
 
-namespace Encyclopedia.Entrys;
+namespace DesignTable.Entry;
 
-public class EncyCharacterEntry : EncyEntry
+public class DCharacter : DEntry
 {
     public readonly string Name;
     public readonly string Desc;
     public readonly string PortraitPath;
 
-    public EncyCharacterEntry(JObject json)
+    public DCharacter(JObject json)
         : base(json)
     {
         Name = json.GetString("Name");

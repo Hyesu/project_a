@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace Encyclopedia.Extensions;
+namespace DesignTable.Extensions;
 
 public static class JsonExtensions
 {
