@@ -28,7 +28,7 @@ internal class Program
             }
         }
 
-        var dlg = dt.Dialog.GetByStrId<DDialog>("dlg_sample");
+        var dlg = dt.Dialog.GetByStrId("dlg_sample");
         Console.WriteLine($"dlg({dlg.StrId}) type({dlg.Type})");
         foreach (var speech in dlg.Speeches)
         {

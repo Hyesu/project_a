@@ -42,7 +42,18 @@ public class DTable
     {
     }
 
-    public T? Get<T>(int id) where T : DEntry
+    public virtual DEntry Get(int id)
+    {
+        return null;
+    }
+
+    public virtual DEntry GetByStrId(string strId)
+    {
+        return null;
+    }
+
+
+    protected T? GetInternal<T>(int id) where T : DEntry
     {
         if (!_entries.TryGetValue(id, out var entry))
             return null;
@@ -50,7 +61,7 @@ public class DTable
         return entry as T;
     }
 
-    public T? GetByStrId<T>(string strId) where T : DEntry
+    protected T? GetByStrIdInternal<T>(string strId) where T : DEntry
     {
         if (!_entriesByStrId.TryGetValue(strId, out var entry))
             return null;

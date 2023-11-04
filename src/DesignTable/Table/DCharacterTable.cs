@@ -15,4 +15,14 @@ public class DCharacterTable : DTable
     {
         return new DCharacter(jsonObj);
     }
+
+    public override DCharacter Get(int id)
+    {
+        return GetInternal<DCharacter>(id);
+    }
+
+    public override DCharacter GetByStrId(string strId)
+    {
+        return GetByStrIdInternal<DCharacter>(strId);
+    }
 }
