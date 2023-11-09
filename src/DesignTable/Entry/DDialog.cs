@@ -63,4 +63,14 @@ public class DDialog : DEntry
             .Select(x => new DDialogSpeech(x))
             .ToImmutableArray();
     }
+
+    public DDialogSpeech FindSpeech(string key)
+    {
+        if (string.IsNullOrEmpty(key))
+        {
+            return null;
+        }
+
+        return Speeches.FirstOrDefault(x => key == x.Key);
+    }
 }

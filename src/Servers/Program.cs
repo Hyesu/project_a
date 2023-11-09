@@ -1,6 +1,5 @@
 ﻿using System.Configuration;
 using DesignTable.Core;
-using DesignTable.Entry;
 
 internal class Program
 {

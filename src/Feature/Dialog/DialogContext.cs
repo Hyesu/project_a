@@ -5,12 +5,15 @@ namespace Feature.Dialog;
 
 public class DialogContext
 {
+    public const int InactiveIdx = -1;
+
     private readonly DDialog _dDlg;
     private readonly Dictionary<string, IDialogParticipant> _participants;
     private readonly ImmutableArray<IDialogHandler> _handlers;
+    private bool _hasStarted;
 
-    private DDialogSpeech _activeSpeech;
-    private int _activeIdx;
+    public DDialogSpeech ActiveSpeech { get; private set; }
+    public int ActiveIdx { get; private set; }
 
     public DialogContext(DDialog dDlg, IEnumerable<IDialogParticipant> participants, IEnumerable<IDialogHandler> handlers)
     {
@@ -18,14 +21,14 @@ public class DialogContext
         _participants = participants.ToDictionary(x => x.GetParticipantKey(), x => x);
         _handlers = handlers.ToList().ToImmutableArray();
 
-        _activeSpeech = null;
-        _activeIdx = -1;
+        ActiveSpeech = null;
+        ActiveIdx = InactiveIdx;
     }
 
     private void Reset()
     {
-        _activeIdx = -1;
-        _activeSpeech = null;
+        ActiveIdx = InactiveIdx;
+        ActiveSpeech = null;
     }
 
     private void Activate(DDialogSpeech rSpeech)
@@ -35,7 +38,7 @@ public class DialogContext
             return;
         }
 
-        _activeSpeech = rSpeech;
+        ActiveSpeech = rSpeech;
 
         var participant = FindParticipant(rSpeech.Character);
         participant?.OnActivated(this);
@@ -48,13 +51,13 @@ public class DialogContext
 
     private void Deactivate()
     {
-        if (null == _activeSpeech)
+        if (null == ActiveSpeech)
         {
             return;
         }
 
-        var prevSpeech = _activeSpeech;
-        _activeSpeech = null;
+        var prevSpeech = ActiveSpeech;
+        ActiveSpeech = null;
 
         var participant = FindParticipant(prevSpeech.Character);
         participant?.OnDeactivated(this);
@@ -67,6 +70,11 @@ public class DialogContext
 
     public void Start()
     {
+        if (_hasStarted)
+        {
+            throw new InvalidOperationException($"cannot start duplicately for started dialog - dDlg({_dDlg.StrId})");
+        }
+
         Reset();
 
         foreach (var participant in _participants.Values)
@@ -79,35 +87,61 @@ public class DialogContext
             handler.OnStarted(this);
         }
 
+        _hasStarted = true;
+
         Next();
     }
 
-    public void Next()
+    public bool Next()
     {
-        Jump(_activeIdx + 1);
+        if (!_hasStarted)
+        {
+            throw new InvalidOperationException($"cannot next for not started dialog - dDlg({_dDlg.StrId})");
+        }
+
+        var nextIdx = ActiveIdx + 1;
+        var jumpKey = ActiveSpeech?.JumpKey;
+        var jumpSpeech = _dDlg.FindSpeech(jumpKey);
+        if (null != jumpSpeech)
+        {
+            nextIdx = _dDlg.Speeches.IndexOf(jumpSpeech);
+        }
+
+        return Jump(nextIdx);
     }
 
-    public void Jump(int idx)
+    public bool Jump(int idx)
     {
+        if (!_hasStarted)
+        {
+            throw new InvalidOperationException($"cannot jump for not started dialog - dDlg({_dDlg.StrId})");
+        }
+
         Deactivate();
 
-        _activeIdx = idx;
+        ActiveIdx = idx;
 
-        var nextSpeech = _dDlg.Speeches.ElementAtOrDefault(_activeIdx);
+        var nextSpeech = _dDlg.Speeches.ElementAtOrDefault(ActiveIdx);
         if (null != nextSpeech)
         {
             Activate(nextSpeech);
-            return;
+            return true;
         }
 
         End();
+        return false;
     }
 
     public void End()
     {
+        if (!_hasStarted)
+        {
+            throw new InvalidOperationException($"cannot end for not started dialog - dDlg({_dDlg.StrId})");
+        }
+
         Deactivate();
 
-        _activeIdx = _dDlg.Speeches.Length;
+        ActiveIdx = _dDlg.Speeches.Length;
 
         foreach (var participant in _participants.Values)
         {

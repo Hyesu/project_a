@@ -21,8 +21,8 @@ public class DContext
         _tables = new();
 
         // create indexes
-        Character = AddTable(new DCharacterTable("Character"));
-        Dialog = AddTable(new DDialogTable("Dialog"));
+        Character = Add(new DCharacterTable("Character"));
+        Dialog = Add(new DDialogTable("Dialog"));
     }
 
     public void Initialize()
@@ -57,10 +57,14 @@ public class DContext
         return table.Name;
     }
 
-    protected T AddTable<T>(T table) where T : DTable
+    protected T Add<T>(T table) where T : DTable
     {
         _tables.Add(typeof(T), table);
         return table;
     }
 
+    public DTable Get<T>() where T : DTable
+    {
+        return _tables.TryGetValue(typeof(T), out var table) ? table : null;
+    }
 }

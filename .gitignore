@@ -14,7 +14,7 @@ client/Assets/*
 !client/Assets/Scripts
 
 # common source ignores
-src/*/.vs/*
-src/*/bin/*
-src/*/obj/*
-src/*/.editorconfig
+**/.vs/*
+**/bin/*
+**/obj/*
+**/.editorconfig
