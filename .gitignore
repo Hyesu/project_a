@@ -18,3 +18,4 @@ client/Assets/*
 **/bin/*
 **/obj/*
 **/.editorconfig
+**/.idea/*
