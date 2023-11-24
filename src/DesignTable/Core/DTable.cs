@@ -1,87 +1,80 @@
-﻿using Newtonsoft.Json.Linq;
-using DesignTable.Core;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Newtonsoft.Json.Linq;
 
-namespace DesignTable.Core;
-
-public class DTable
+namespace DesignTable.Core
 {
-    private readonly string _name;
-    private readonly string _path;
-
-    private readonly Dictionary<int, DEntry> _entries;
-    private readonly Dictionary<string, DEntry> _entriesByStrId;
-
-    public string Name => _name;
-    public string Path => _path;
-    public IEnumerable<DEntry> All => _entries.Values;
-
-    public DTable(string name, string path)
+    public class DTable
     {
-        _name = name;
-        _path = path;
+        private readonly string _name;
+        private readonly string _path;
 
-        _entries = new();
-        _entriesByStrId = new();
-    }
+        private readonly Dictionary<int, DEntry> _entries;
+        private readonly Dictionary<string, DEntry> _entriesByStrId;
 
-    protected virtual DEntry CreateEntry(JObject entry)
-    {
-        throw new NotImplementedException($"not implemented ency-section entry creator");
-    }
+        public string Name => _name;
+        public string Path => _path;
+        public IEnumerable<DEntry> All => _entries.Values;
 
-    public virtual void Initialize(IList<JObject> jsonObjs)
-    {
-        var entries = jsonObjs.Select(x => CreateEntry(x));
-        foreach (var entry in entries)
+        public DTable(string name, string path)
         {
-            AddEntry(entry);
-        }
-    }
+            _name = name;
+            _path = path;
 
-    public virtual void PostInitialize(IReadOnlyDictionary<Type, DTable> allSections)
-    {
-    }
-
-    public virtual DEntry Get(int id)
-    {
-        return null;
-    }
-
-    public virtual DEntry GetByStrId(string strId)
-    {
-        return null;
-    }
-
-
-    protected T? GetInternal<T>(int id) where T : DEntry
-    {
-        if (!_entries.TryGetValue(id, out var entry))
-            return null;
-
-        return entry as T;
-    }
-
-    protected T? GetByStrIdInternal<T>(string strId) where T : DEntry
-    {
-        if (!_entriesByStrId.TryGetValue(strId, out var entry))
-            return null;
-
-        return entry as T;
-    }
-
-    protected void AddEntry(DEntry entry)
-    {
-        if (_entries.ContainsKey(entry.Id))
-        {
-            throw new InvalidDataException($"duplicate ency-entry id- section({_name}) id({entry.Id})");
+            _entries = new();
+            _entriesByStrId = new();
         }
 
-        if (_entriesByStrId.ContainsKey(entry.StrId))
+        protected virtual DEntry CreateEntry(JObject entry)
         {
-            throw new InvalidDataException($"duplicate ency-entry strId- section({_name}) strId({entry.StrId})");
+            throw new NotImplementedException($"not implemented ency-section entry creator");
         }
 
-        _entries.Add(entry.Id, entry);
-        _entriesByStrId.Add(entry.StrId, entry);
+        public virtual void Initialize(IList<JObject> jsonObjs)
+        {
+            var entries = jsonObjs.Select(x => CreateEntry(x));
+            foreach (var entry in entries)
+            {
+                AddEntry(entry);
+            }
+        }
+
+        public virtual void PostInitialize(IReadOnlyDictionary<Type, DTable> allSections)
+        {
+        }
+
+        protected T GetInternal<T>(int id) where T : DEntry
+        {
+            if (!_entries.TryGetValue(id, out var entry))
+                return null;
+
+            return entry as T;
+        }
+
+        protected T GetByStrIdInternal<T>(string strId) where T : DEntry
+        {
+            if (!_entriesByStrId.TryGetValue(strId, out var entry))
+                return null;
+
+            return entry as T;
+        }
+
+        private void AddEntry(DEntry entry)
+        {
+            if (_entries.ContainsKey(entry.Id))
+            {
+                throw new InvalidDataException($"duplicate ency-entry id- section({_name}) id({entry.Id})");
+            }
+
+            if (_entriesByStrId.ContainsKey(entry.StrId))
+            {
+                throw new InvalidDataException($"duplicate ency-entry strId- section({_name}) strId({entry.StrId})");
+            }
+
+            _entries.Add(entry.Id, entry);
+            _entriesByStrId.Add(entry.StrId, entry);
+        }
     }
 }

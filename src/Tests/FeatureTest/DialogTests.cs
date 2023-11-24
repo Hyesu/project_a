@@ -67,7 +67,7 @@ public class DialogTests : FeatureTestBase
     }
 
     //////////////////////////
-    [Test(Description = "순방향 플레이")]
+    [Test]
     public void TestNext()
     {
         var dDlg = D.RandomDialog();
@@ -82,7 +82,7 @@ public class DialogTests : FeatureTestBase
             .AddParticipants(participants)
             .Build();
 
-        // 초기 상태 확인
+        // check initial state
         Assert.That(context, Is.Not.Null);
         Assert.That(context.ActiveSpeech, Is.Null);
         Assert.That(context.ActiveIdx, Is.EqualTo(DialogContext.InactiveIdx));
@@ -98,7 +98,7 @@ public class DialogTests : FeatureTestBase
             Assert.That(participant.Ended, Is.False);
         }
 
-        // 시작 => 첫 번째 대사 실행됨
+        // start => played first speech
         context.Start();
         Assert.That(context.ActiveSpeech, Is.EqualTo(dDlg.Speeches.First()));
         Assert.That(context.ActiveIdx, Is.EqualTo(0));
@@ -115,23 +115,23 @@ public class DialogTests : FeatureTestBase
             Assert.That(participant.Ended, Is.False);
         }
 
-        // 다음 => 두 번째 대사 실행됨
+        // next => played second speech
         var playing = context.Next();
-        Assert.That(playing, Is.EqualTo(dDlg.Speeches.Length > 1));
+        Assert.That(playing, Is.EqualTo(dDlg.Speeches.Count > 1));
         Assert.That(context.ActiveSpeech, Is.EqualTo(dDlg.Speeches[1]));
         Assert.That(context.ActiveIdx, Is.EqualTo(1));
 
-        // 끝날때까지 넘기기 => 끝 상태 확인
+        // next until end => check finished state
         while (context.Next()) { }
         Assert.That(context.ActiveSpeech, Is.EqualTo(null));
-        Assert.That(context.ActiveIdx, Is.EqualTo(dDlg.Speeches.Length));
+        Assert.That(context.ActiveIdx, Is.EqualTo(dDlg.Speeches.Count));
 
         Assert.That(handler.Started, Is.True);
-        Assert.That(handler.UpdatedCnt, Is.EqualTo(dDlg.Speeches.Length));
+        Assert.That(handler.UpdatedCnt, Is.EqualTo(dDlg.Speeches.Count));
         Assert.That(handler.Ended, Is.True);
     }
 
-    [Test(Description = "특정 노드로 점프")]
+    [Test]
     public void TestJump()
     {
         var dDlg = D.RandomDialog();
@@ -140,14 +140,14 @@ public class DialogTests : FeatureTestBase
 
         context.Start();
 
-        var idx = Random.Shared.Next(2, dDlg.Speeches.Length);
+        var idx = Random.Shared.Next(2, dDlg.Speeches.Count);
         var playing = context.Jump(idx);
         Assert.That(playing, Is.True);
         Assert.That(context.ActiveSpeech, Is.EqualTo(dDlg.Speeches[idx]));
         Assert.That(context.ActiveIdx, Is.EqualTo(idx));
     }
 
-    [Test(Description = "종료")]
+    [Test]
     public void TestEnd()
     {
         var dDlg = D.RandomDialog();
@@ -158,6 +158,6 @@ public class DialogTests : FeatureTestBase
 
         context.End();
         Assert.That(context.ActiveSpeech, Is.Null);
-        Assert.That(context.ActiveIdx, Is.EqualTo(dDlg.Speeches.Length));
+        Assert.That(context.ActiveIdx, Is.EqualTo(dDlg.Speeches.Count));
     }
 }

@@ -1,37 +1,41 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json.Linq;
 
-namespace DesignTable.Extensions;
-
-public static class JsonExtensions
+namespace DesignTable.Extensions
 {
-    public static int GetInt(this JObject json, string key)
+    public static class JsonExtensions
     {
-        return int.Parse(json.GetString(key));
-    }
-
-    public static string GetString(this JObject json, string key)
-    {
-        if (!json.TryGetValue(key, out var value))
+        public static int GetInt(this JObject json, string key)
         {
-            return null;
+            return int.Parse(json.GetString(key));
         }
 
-        return value.ToString();
-    }
-
-    public static T GetEnum<T>(this JObject json, string key) where T : Enum
-    {
-        return (T)Enum.Parse(typeof(T),json.GetString(key));
-    }
-
-    public static IEnumerable<JObject?> GetObjArray(this JObject json, string key)
-    {
-        if (!json.TryGetValue(key, out var value))
+        public static string GetString(this JObject json, string key)
         {
-            return Enumerable.Empty<JObject?>();
+            if (!json.TryGetValue(key, out var value))
+            {
+                return null;
+            }
+
+            return value.ToString();
         }
 
-        return value.ToArray()
-            .Select(x => x.ToObject<JObject>());
-    }
+        public static T GetEnum<T>(this JObject json, string key) where T : Enum
+        {
+            return (T)Enum.Parse(typeof(T),json.GetString(key));
+        }
+
+        public static IEnumerable<JObject> GetObjArray(this JObject json, string key)
+        {
+            if (!json.TryGetValue(key, out var value))
+            {
+                return Enumerable.Empty<JObject>();
+            }
+
+            return value.ToArray()
+                .Select(x => x.ToObject<JObject>());
+        }
+    }   
 }

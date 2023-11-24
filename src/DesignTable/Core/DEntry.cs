@@ -1,21 +1,23 @@
-﻿using DesignTable.Extensions;
+﻿using System;
 using Newtonsoft.Json.Linq;
+using DesignTable.Extensions;
 
-namespace DesignTable.Core;
-
-public class DEntry
+namespace DesignTable.Core
 {
-    public readonly int Id;
-    public readonly string StrId;
-
-    public DEntry(JObject json)
+    public class DEntry
     {
-        Id = json.GetInt("Id");
-        StrId = json.GetString("StrId");
-    }
+        public readonly int Id;
+        public readonly string StrId;
 
-    public virtual void Initialize(JObject entryObj)
-    {
-        throw new NotImplementedException($"not implemented ency-entry");
+        public DEntry(JObject json)
+        {
+            Id = json.GetInt("Id");
+            StrId = json.GetString("StrId");
+        }
+
+        public virtual void Initialize(JObject entryObj)
+        {
+            throw new NotImplementedException($"not implemented ency-entry");
+        }
     }
 }

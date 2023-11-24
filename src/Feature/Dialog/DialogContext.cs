@@ -141,7 +141,7 @@ public class DialogContext
 
         Deactivate();
 
-        ActiveIdx = _dDlg.Speeches.Length;
+        ActiveIdx = _dDlg.Speeches.Count;
 
         foreach (var participant in _participants.Values)
         {
