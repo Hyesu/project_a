@@ -1,0 +1,3 @@
+[submodule "cs_game"]
+	path = cs_game
+	url = https://github.com/Hyesu/cs_game
