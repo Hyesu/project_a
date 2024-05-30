@@ -19,3 +19,4 @@ client/Assets/*
 **/obj/*
 **/.editorconfig
 **/.idea/*
+**/.DS_Store
