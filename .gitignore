@@ -9,9 +9,8 @@ client/.svn/*
 client/Assembly-CSharp.csproj
 client/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json
 
-# track only scripts
-client/Assets/*
-!client/Assets/Scripts
+# packages
+client/Assets/TextMesh Pro
 
 # common source ignores
 **/.vs/*
